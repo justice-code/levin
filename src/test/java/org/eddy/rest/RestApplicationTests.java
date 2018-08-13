@@ -16,9 +16,6 @@ import static com.google.common.base.CaseFormat.LOWER_UNDERSCORE;
 @SpringBootTest(classes = RestApplication.class)
 public class RestApplicationTests {
 
-    @Autowired
-    private RestTemplate restTemplate;
-
     @RestReference(url = "http://localhost:8080")
     private Say say;
 
