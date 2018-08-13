@@ -7,6 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
@@ -18,8 +20,9 @@ public class RestApplication {
 
     @Bean
     public RestTemplate restTemplate() {
-        return restTemplateBuilder.build();
+        return restTemplateBuilder.additionalMessageConverters(new MappingJackson2HttpMessageConverter()).build();
     }
+
 
     public static void main(String[] args) {
         SpringApplication.run(RestApplication.class, args);

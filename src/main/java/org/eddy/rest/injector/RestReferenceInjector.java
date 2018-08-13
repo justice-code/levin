@@ -2,6 +2,7 @@ package org.eddy.rest.injector;
 
 import org.eddy.rest.annotation.RestReference;
 import org.eddy.rest.factoryBean.ReferenceFactoryBean;
+import org.eddy.rest.resolver.UrlResolver;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.PropertyValues;
@@ -33,6 +34,8 @@ public class RestReferenceInjector extends InstantiationAwareBeanPostProcessorAd
 
     @Autowired
     private RestTemplate restTemplate;
+    @Autowired
+    private UrlResolver urlResolver;
 
     private final ConcurrentMap<String, InjectionMetadata> injectionMetadataCache = new ConcurrentHashMap<String, InjectionMetadata>(256);
 
@@ -134,6 +137,7 @@ public class RestReferenceInjector extends InstantiationAwareBeanPostProcessorAd
                 ReferenceFactoryBean factoryBean = new ReferenceFactoryBean(type);
                 factoryBean.setRestTemplate(restTemplate);
                 factoryBean.setRestReference(reference);
+                factoryBean.setResolver(urlResolver);
                 return factoryBean.getObject();
             } catch (Exception e) {
                 throw new RuntimeException(e);

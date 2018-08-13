@@ -19,13 +19,13 @@ public class RestApplicationTests {
     @Autowired
     private RestTemplate restTemplate;
 
-    @RestReference(url = "https://ynuf.alipay.com/service/um.json")
+    @RestReference(url = "http://localhost:8080")
     private Say say;
 
     @Test
     public void contextLoads() {
 
-        System.out.println(say.get());
+        System.out.println(say.getRestSayJson());
     }
 
     @Test

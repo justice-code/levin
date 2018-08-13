@@ -5,12 +5,14 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.eddy.rest.annotation.RestReference;
+import org.eddy.rest.resolver.UrlResolver;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.cglib.proxy.InvocationHandler;
 import org.springframework.cglib.proxy.Proxy;
 import org.springframework.web.client.RestTemplate;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Map;
 
 import static com.google.common.base.CaseFormat.LOWER_CAMEL;
@@ -24,6 +26,7 @@ public class ReferenceFactoryBean implements FactoryBean {
     private Class type;
     private RestTemplate restTemplate;
     private RestReference restReference;
+    private UrlResolver resolver;
 
     @Override
     public Object getObject() throws Exception {
@@ -40,7 +43,7 @@ public class ReferenceFactoryBean implements FactoryBean {
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
             String[] command = LOWER_CAMEL.to(LOWER_UNDERSCORE, method.getName()).split("_");
-            return RequestMethod.valueOf(command[0]).call(restReference.url(), method.getReturnType(), null, restTemplate);
+            return RequestMethod.valueOf(command[0]).call(resolver.resolve(restReference.url(), Arrays.copyOfRange(command, 1, command.length - 1), command[command.length - 1]), method.getReturnType(), restTemplate);
         }
     }
 
@@ -48,18 +51,18 @@ public class ReferenceFactoryBean implements FactoryBean {
 
         post {
             @Override
-            public <T> T call(String url, Class<T> type, Map<String, String> params, RestTemplate restTemplate) {
+            public <T> T call(String url, Class<T> type, RestTemplate restTemplate) {
                 return null;
             }
         },
         get {
             @Override
-            public <T> T call(String url, Class<T> type, Map<String, String> params, RestTemplate restTemplate) {
+            public <T> T call(String url, Class<T> type, RestTemplate restTemplate) {
                 return restTemplate.getForObject(url, type);
             }
         };
 
-        public <T> T call(String url, Class<T> type, Map<String, String> params, RestTemplate restTemplate) {
+        public <T> T call(String url, Class<T> type, RestTemplate restTemplate) {
             return null;
         }
     }
