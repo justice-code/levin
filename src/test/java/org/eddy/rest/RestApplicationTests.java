@@ -1,13 +1,11 @@
 package org.eddy.rest;
 
-import org.eddy.rest.annotation.RestReference;
+import org.eddy.rest.sample.Say;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.client.RestTemplate;
 
 import static com.google.common.base.CaseFormat.LOWER_CAMEL;
 import static com.google.common.base.CaseFormat.LOWER_UNDERSCORE;
@@ -16,7 +14,7 @@ import static com.google.common.base.CaseFormat.LOWER_UNDERSCORE;
 @SpringBootTest(classes = RestApplication.class)
 public class RestApplicationTests {
 
-    @RestReference(url = "http://localhost:8080")
+    @Autowired
     private Say say;
 
     @Test

@@ -1,8 +1,8 @@
 package org.eddy.rest.injector;
 
 import org.eddy.rest.annotation.RestReference;
+import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
-import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
@@ -38,6 +38,20 @@ public class RestReferenceScanner extends ClassPathBeanDefinitionScanner {
     protected Set<BeanDefinitionHolder> doScan(String... basePackages) {
         Set<BeanDefinitionHolder> beanDefinitionHolderSet = super.doScan(basePackages);
         return beanDefinitionHolderSet;
+    }
+
+    /**
+     * Determine whether the given bean definition qualifies as candidate.
+     * <p>The default implementation checks whether the class is not an interface
+     * and not dependent on an enclosing class.
+     * <p>Can be overridden in subclasses.
+     *
+     * @param beanDefinition the bean definition to check
+     * @return whether the bean definition qualifies as a candidate component
+     */
+    @Override
+    protected boolean isCandidateComponent(AnnotatedBeanDefinition beanDefinition) {
+        return beanDefinition.getMetadata().isInterface() && beanDefinition.getMetadata().isIndependent();
     }
 
     private void registerReference(BeanDefinitionHolder beanDefinitionHolder, BeanDefinitionRegistry registry) {
