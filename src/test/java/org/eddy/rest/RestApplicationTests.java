@@ -1,5 +1,7 @@
 package org.eddy.rest;
 
+import org.eddy.rest.annotation.RestReference;
+import org.eddy.rest.sample.RestTestInterface;
 import org.eddy.rest.sample.Say;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,10 +19,14 @@ public class RestApplicationTests {
     @Autowired
     private Say say;
 
+    @RestReference(url = "http://localhost:8080")
+    private RestTestInterface restTestInterface;
+
     @Test
     public void contextLoads() {
 
         System.out.println(say.getRestSayJson());
+        System.out.println(restTestInterface.getRestSayJson());
     }
 
     @Test
