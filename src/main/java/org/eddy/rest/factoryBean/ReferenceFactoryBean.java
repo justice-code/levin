@@ -13,7 +13,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.Map;
 
 import static com.google.common.base.CaseFormat.LOWER_CAMEL;
 import static com.google.common.base.CaseFormat.LOWER_UNDERSCORE;
