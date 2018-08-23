@@ -1,9 +1,14 @@
 package org.eddy.rest.injector;
 
 import org.eddy.rest.annotation.RestReference;
+import org.eddy.rest.factoryBean.ReferenceFactoryBean;
+import org.eddy.rest.sample.Say;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
+import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 
@@ -37,7 +42,25 @@ public class RestReferenceScanner extends ClassPathBeanDefinitionScanner {
     @Override
     protected Set<BeanDefinitionHolder> doScan(String... basePackages) {
         Set<BeanDefinitionHolder> beanDefinitionHolderSet = super.doScan(basePackages);
+        beanDefinitionHolderSet.stream().forEach(beanDefinitionHolder -> postProcessBeanDefinition(beanDefinitionHolder));
         return beanDefinitionHolderSet;
+    }
+
+    private void postProcessBeanDefinition(BeanDefinitionHolder beanDefinitionHolder) {
+        GenericBeanDefinition genericBeanDefinition = (GenericBeanDefinition) beanDefinitionHolder.getBeanDefinition();
+        Class type = resoveType(genericBeanDefinition.getBeanClassName());
+        genericBeanDefinition.setBeanClass(ReferenceFactoryBean.class);
+        genericBeanDefinition.getConstructorArgumentValues().addIndexedArgumentValue(0, type);
+        genericBeanDefinition.getConstructorArgumentValues().addIndexedArgumentValue(1, type.getAnnotation(RestReference.class));
+        genericBeanDefinition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
+    }
+
+    private Class resoveType(String beanClassName) {
+        try {
+            return Class.forName(beanClassName);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -52,10 +75,5 @@ public class RestReferenceScanner extends ClassPathBeanDefinitionScanner {
     @Override
     protected boolean isCandidateComponent(AnnotatedBeanDefinition beanDefinition) {
         return beanDefinition.getMetadata().isInterface() && beanDefinition.getMetadata().isIndependent();
-    }
-
-    private void registerReference(BeanDefinitionHolder beanDefinitionHolder, BeanDefinitionRegistry registry) {
-
-
     }
 }

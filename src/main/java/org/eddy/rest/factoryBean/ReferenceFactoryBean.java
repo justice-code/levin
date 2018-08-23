@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.eddy.rest.annotation.RestReference;
 import org.eddy.rest.resolver.UrlResolver;
 import org.springframework.beans.factory.FactoryBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.proxy.InvocationHandler;
 import org.springframework.cglib.proxy.Proxy;
 import org.springframework.web.client.RestTemplate;
@@ -23,9 +24,19 @@ public class ReferenceFactoryBean implements FactoryBean {
 
     @NonNull
     private Class type;
+    @Autowired
     private RestTemplate restTemplate;
     private RestReference restReference;
+    @Autowired
     private UrlResolver resolver;
+
+    public ReferenceFactoryBean() {
+    }
+
+    public ReferenceFactoryBean(Class type, RestReference restReference) {
+        this.type = type;
+        this.restReference = restReference;
+    }
 
     @Override
     public Object getObject() throws Exception {
