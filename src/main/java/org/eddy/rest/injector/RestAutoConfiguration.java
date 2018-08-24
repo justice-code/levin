@@ -21,7 +21,7 @@ public class RestAutoConfiguration implements ImportBeanDefinitionRegistrar, Bea
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
         // 处理field
-        registry.registerBeanDefinition("dubboReferenceInjector", BeanDefinitionBuilder.rootBeanDefinition(RestReferenceInjector.class).setRole(BeanDefinition.ROLE_INFRASTRUCTURE).getBeanDefinition());
+        registry.registerBeanDefinition("restReferenceInjector", BeanDefinitionBuilder.rootBeanDefinition(RestReferenceInjector.class).setRole(BeanDefinition.ROLE_INFRASTRUCTURE).getBeanDefinition());
 
         // 处理接口
         List<String> pkgs = AutoConfigurationPackages.get(beanFactory);
