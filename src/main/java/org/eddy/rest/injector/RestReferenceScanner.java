@@ -2,9 +2,7 @@ package org.eddy.rest.injector;
 
 import org.eddy.rest.annotation.RestReference;
 import org.eddy.rest.factoryBean.ReferenceFactoryBean;
-import org.eddy.rest.sample.Say;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
-import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
@@ -24,9 +22,6 @@ public class RestReferenceScanner extends ClassPathBeanDefinitionScanner {
      */
     public RestReferenceScanner(BeanDefinitionRegistry registry) {
         super(registry);
-    }
-
-    public void registerFilter() {
         addIncludeFilter(new AnnotationTypeFilter(RestReference.class));
     }
 
@@ -48,14 +43,14 @@ public class RestReferenceScanner extends ClassPathBeanDefinitionScanner {
 
     private void postProcessBeanDefinition(BeanDefinitionHolder beanDefinitionHolder) {
         GenericBeanDefinition genericBeanDefinition = (GenericBeanDefinition) beanDefinitionHolder.getBeanDefinition();
-        Class type = resoveType(genericBeanDefinition.getBeanClassName());
+        Class type = resolveType(genericBeanDefinition.getBeanClassName());
         genericBeanDefinition.setBeanClass(ReferenceFactoryBean.class);
         genericBeanDefinition.getConstructorArgumentValues().addIndexedArgumentValue(0, type);
         genericBeanDefinition.getConstructorArgumentValues().addIndexedArgumentValue(1, type.getAnnotation(RestReference.class));
         genericBeanDefinition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
     }
 
-    private Class resoveType(String beanClassName) {
+    private Class resolveType(String beanClassName) {
         try {
             return Class.forName(beanClassName);
         } catch (ClassNotFoundException e) {

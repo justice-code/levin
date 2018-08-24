@@ -24,7 +24,6 @@ public class RestImportBeanDefinitionRegistrar implements ImportBeanDefinitionRe
         // 处理接口
         List<String> pkgs = AutoConfigurationPackages.get(beanFactory);
         RestReferenceScanner scanner = new RestReferenceScanner(registry);
-        scanner.registerFilter();
         scanner.doScan(StringUtils.toStringArray(pkgs));
     }
 
