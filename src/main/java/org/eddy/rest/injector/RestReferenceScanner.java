@@ -10,6 +10,7 @@ import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 public class RestReferenceScanner extends ClassPathBeanDefinitionScanner {
@@ -20,7 +21,7 @@ public class RestReferenceScanner extends ClassPathBeanDefinitionScanner {
      * @param registry the {@code BeanFactory} to load bean definitions into, in the form
      *                 of a {@code BeanDefinitionRegistry}
      */
-    public RestReferenceScanner(BeanDefinitionRegistry registry) {
+    RestReferenceScanner(BeanDefinitionRegistry registry) {
         super(registry);
         addIncludeFilter(new AnnotationTypeFilter(RestReference.class));
     }
@@ -35,9 +36,10 @@ public class RestReferenceScanner extends ClassPathBeanDefinitionScanner {
      * @return set of beans registered if any for tooling registration purposes (never {@code null})
      */
     @Override
+    @NotNull
     protected Set<BeanDefinitionHolder> doScan(String... basePackages) {
         Set<BeanDefinitionHolder> beanDefinitionHolderSet = super.doScan(basePackages);
-        beanDefinitionHolderSet.stream().forEach(beanDefinitionHolder -> postProcessBeanDefinition(beanDefinitionHolder));
+        beanDefinitionHolderSet.forEach(this::postProcessBeanDefinition);
         return beanDefinitionHolderSet;
     }
 
