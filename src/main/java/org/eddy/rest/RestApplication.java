@@ -1,18 +1,14 @@
 package org.eddy.rest;
 
-import org.eddy.rest.injector.RestImportBeanDefinitionRegistrar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
-@Import(RestImportBeanDefinitionRegistrar.class)
 public class RestApplication {
 
     @Autowired
